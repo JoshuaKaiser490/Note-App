@@ -1,34 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CreateNote from './CreateNote';
 import './notes.css';
 import { v4 as uuid } from 'uuid';
 import Note from './Note';
 
 const Notes = () => {
-    const [inputText, setInputText] = useState('');
+    const [inputText, setInputText] = useState("");
     const [notes, setNotes] = useState([]);
     const [editToggle, setEditToggle] = useState(null);
+    const [deadline, setDeadline] = useState('');
+    const [tags, setTags] = useState('');
+    const [priority, setPriority] = useState('Normal');
 
-    const editHandler = (id, text, deadline) => {
+    const editHandler = (id, text, deadline, tags, priority) => {
         setEditToggle(id);
         setInputText(text);
+        setDeadline(deadline);
+        setTags(tags);
+        setPriority(priority);
     };
 
-    const saveHandler = (text, deadline) => {
+    const saveHandler = (text, deadline, tags, priority) => {
         if (editToggle) {
             setNotes(notes.map((note) => (
-                note.id === editToggle ? { ...note, text: inputText, deadline } : note
+                note.id === editToggle ? { ...note, text, deadline, tags, priority } : note
             )));
+            setEditToggle(null); 
         } else {
             setNotes((prevNotes) => [
+                { id: uuid(), text, deadline, tags, priority },
                 ...prevNotes,
-                {
-                    id: uuid(),
-                    text: inputText,
-                    deadline
-                }
             ]);
         }
+        setInputText("");
+        setDeadline('');
+        setTags('');
+        setPriority('Normal');
     };
 
     const deleteHandler = (id) => {
@@ -37,29 +44,37 @@ const Notes = () => {
     };
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem('Notes'));
+        const data = JSON.parse(localStorage.getItem("Notes"));
         if (data) {
             setNotes(data);
         }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('Notes', JSON.stringify(notes));
+        localStorage.setItem("Notes", JSON.stringify(notes));
     }, [notes]);
 
     return (
         <div className='notes'>
-            <CreateNote inputText={inputText} setInputText={setInputText} saveHandler={saveHandler} />
-            {notes.map((note) => (
-                <Note
-                    key={note.id}
-                    id={note.id}
-                    text={note.text}
-                    deadline={note.deadline}
-                    editHandler={editHandler}
-                    deleteHandler={deleteHandler}
-                />
-            ))}
+            <CreateNote
+                inputText={inputText}
+                setInputText={setInputText}
+                saveHandler={saveHandler}
+            />
+            {
+                notes.map((note) => (
+                    <Note
+                        key={note.id}
+                        id={note.id}
+                        text={note.text}
+                        editHandler={editHandler}
+                        deleteHandler={deleteHandler}
+                        deadline={note.deadline}
+                        tags={note.tags}
+                        priority={note.priority}
+                    />
+                ))
+            }
         </div>
     );
 };
