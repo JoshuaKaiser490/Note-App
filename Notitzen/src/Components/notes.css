@@ -90,6 +90,6 @@
     }
 
     .note-create {
-        order: -1; /* Move CreateNote to the top */
+        order: -1;
     }
 }
