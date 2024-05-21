@@ -11,24 +11,26 @@ const Notes = () => {
     const [deadline, setDeadline] = useState('');
     const [tags, setTags] = useState('');
     const [priority, setPriority] = useState('Normal');
+    const [password, setPassword] = useState('');
 
-    const editHandler = (id, text, deadline, tags, priority) => {
+    const editHandler = (id, text, deadline, tags, priority, password) => {
         setEditToggle(id);
         setInputText(text);
         setDeadline(deadline);
         setTags(tags);
         setPriority(priority);
+        setPassword(password);
     };
 
-    const saveHandler = (text, deadline, tags, priority) => {
+    const saveHandler = (text, deadline, tags, priority, password) => {
         if (editToggle) {
             setNotes(notes.map((note) => (
-                note.id === editToggle ? { ...note, text, deadline, tags, priority } : note
+                note.id === editToggle ? { ...note, text, deadline, tags, priority, password } : note
             )));
-            setEditToggle(null); 
+            setEditToggle(null);
         } else {
             setNotes((prevNotes) => [
-                { id: uuid(), text, deadline, tags, priority },
+                { id: uuid(), text, deadline, tags, priority, password },
                 ...prevNotes,
             ]);
         }
@@ -36,6 +38,7 @@ const Notes = () => {
         setDeadline('');
         setTags('');
         setPriority('Normal');
+        setPassword('');
     };
 
     const deleteHandler = (id) => {
@@ -72,6 +75,7 @@ const Notes = () => {
                         deadline={note.deadline}
                         tags={note.tags}
                         priority={note.priority}
+                        password={note.password}
                     />
                 ))
             }
