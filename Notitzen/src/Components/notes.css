@@ -14,6 +14,10 @@
     word-wrap: break-word;
 }
 
+.label{
+    margin-bottom: 8px;
+}
+
 .note_footer {
     display: flex;
     align-items: center;
