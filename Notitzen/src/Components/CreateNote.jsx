@@ -19,7 +19,7 @@ const CreateNote = ({ inputText, setInputText, saveHandler }) => {
             <textarea
                 cols={10}
                 rows={5}
-                placeholder='Notitz...'
+                placeholder='Notiz...'
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
